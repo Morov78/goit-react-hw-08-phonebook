@@ -1,25 +1,13 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 
-import ContactForm from './ContactFrom/ContactForm';
-import ContactList from './ContactList/ContactList';
-import { Loader } from './Loader/Loader';
-import Filter from './Filter/Filter';
-
-import { fetchContacts } from '../redux/operations';
-import { selectContacts, selectError, selectIsLoading } from 'redux/selectors';
+import Contacts from 'pages/Contacts';
+import AppBar from './AppBar/AppBar';
+import Register from 'pages/Register';
+import Login from 'pages/Login';
+import Home from 'pages/Home';
+// import AppBar from './AppBar/AppBar';
 
 export const App = () => {
-  const dispatch = useDispatch();
-
-  const contacts = useSelector(selectContacts);
-  const isLoading = useSelector(selectIsLoading);
-  const error = useSelector(selectError);
-
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
   return (
     <div
       style={{
@@ -31,12 +19,15 @@ export const App = () => {
         flexDirection: 'column',
       }}
     >
-      <ContactForm />
-      <Filter />
-
-      {contacts.length > 0 && <ContactList />}
-      {isLoading && <Loader />}
-      {error && <p>{error}</p>}
+      {/* <AppBar /> */}
+      <Routes>
+        <Route path="/" element={<AppBar />}>
+          <Route index element={<Home />} />
+          <Route path="contacts" element={<Contacts />} />
+          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+        </Route>
+      </Routes>
     </div>
   );
 };
