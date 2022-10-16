@@ -5,6 +5,9 @@ import { Box, Button, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { logIn } from 'redux/auth/operations';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup
   .object({
@@ -14,15 +17,25 @@ const schema = yup
   .required();
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      email: 'morov78@ukr.net',
+      password: '10101010',
+    },
+  });
 
   const handleForm = data => {
-    console.log('login=', data);
+    dispatch(logIn(data));
+    navigate('/contacts');
     reset();
   };
 
@@ -58,6 +71,7 @@ const Login = () => {
           {...register('password')}
           id="password"
           label="Password"
+          type="password"
           variant="outlined"
           required
           error={errors.password ? true : false}

@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import { NavLink, Outlet } from 'react-router-dom';
-import { FaUserAlt } from 'react-icons/fa';
-import { IoLogOut } from 'react-icons/io5';
 
 import logo from '../../Images/logo.png';
+import { useSelector } from 'react-redux';
+import { selectIsLogged } from 'redux/auth/selectors';
+import { UserNav } from 'components/UserNav/UserNav';
+import { AuthNav } from 'components/AuthNav/AuthNav';
 
 const Container = styled.header`
   height: 100px;
@@ -28,16 +30,6 @@ const Wrap = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
-`;
-
-const Button = styled.button`
-  display: flex;
-  border: none;
-
-  border-radius: 10px;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
 `;
 
 const StyledLink = styled(NavLink)`
@@ -67,6 +59,9 @@ const StyledLogo = styled(NavLink)`
   }
 `;
 const AppBar = () => {
+  const isLogged = useSelector(selectIsLogged);
+
+  console.log(isLogged);
   return (
     <>
       <Container>
@@ -74,17 +69,13 @@ const AppBar = () => {
           <img src={logo} alt="logo" />
         </StyledLogo>
         <Nav>
-          <StyledLink to="contacts">Contacts</StyledLink>
-          <StyledLink to="register">Register</StyledLink>
-          <StyledLink to="login">Login</StyledLink>
+          <StyledLink to="/" end>
+            Home
+          </StyledLink>
+          {isLogged && <StyledLink to="contacts">Contacts</StyledLink>}
         </Nav>
-        <Wrap>
-          <FaUserAlt size="1em" color="#1384e7" />
-          <p>mango@mail.com</p>
-          <Button>
-            <IoLogOut size="2em" color="#1384e7" />
-          </Button>
-        </Wrap>
+
+        <Wrap>{isLogged ? <UserNav /> : <AuthNav />}</Wrap>
       </Container>
       <Outlet />
     </>

@@ -6,6 +6,9 @@ import { Box } from '@mui/system';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
+
+import { registerUser } from '../redux/auth/operations';
 
 const schema = yup
   .object({
@@ -18,17 +21,28 @@ const schema = yup
   })
   .required();
 
-const Register = () => {
+const RegisterForm = () => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: 'Morov',
+      email: 'morov78@ukr.net',
+      password: '',
+    },
+  });
 
   const handleForm = data => {
     console.log(data);
-    reset();
+    dispatch(registerUser(data));
+
+    // reset();
   };
 
   return (
@@ -72,7 +86,9 @@ const Register = () => {
           {...register('password')}
           id="password"
           label="Password"
+          type="password"
           variant="outlined"
+          autoComplete="off"
           required
           error={errors.password ? true : false}
           helperText={errors.password?.message}
@@ -91,4 +107,4 @@ const Register = () => {
     </>
   );
 };
-export default Register;
+export default RegisterForm;
