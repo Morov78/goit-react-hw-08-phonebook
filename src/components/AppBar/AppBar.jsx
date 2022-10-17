@@ -4,7 +4,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import logo from '../../Images/logo.png';
 import { useSelector } from 'react-redux';
 import { selectIsLogged } from 'redux/auth/selectors';
-import { UserNav } from 'components/UserNav/UserNav';
+import { UserNav } from 'components/UserMenu/UserMenu';
 import { AuthNav } from 'components/AuthNav/AuthNav';
 
 const Container = styled.header`

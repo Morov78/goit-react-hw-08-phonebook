@@ -1,9 +1,9 @@
 import css from './ContactItem.module.css';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/operations';
+import { deleteContact } from 'redux/contacts/operations';
 
-export default function ContactItem({ id, name, phone }) {
+export default function ContactItem({ id, name, number }) {
   const dispatch = useDispatch();
 
   const handleDeleteContact = () => {
@@ -13,7 +13,7 @@ export default function ContactItem({ id, name, phone }) {
   return (
     <>
       <td>{name}</td>
-      <td>{phone}</td>
+      <td>{number}</td>
       <td>
         <button
           className={css.button}

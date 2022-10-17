@@ -47,7 +47,7 @@ const RegisterForm = () => {
 
   return (
     <>
-      <h2>Registration</h2>
+      <h2 style={{ fontSize: '1em' }}>Registration</h2>
       <Box
         component="form"
         autoComplete="off"

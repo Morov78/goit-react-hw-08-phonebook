@@ -33,8 +33,8 @@ const Login = () => {
     },
   });
 
-  const handleForm = data => {
-    dispatch(logIn(data));
+  const handleForm = async data => {
+    await dispatch(logIn(data));
     navigate('/contacts');
     reset();
   };
