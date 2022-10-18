@@ -17,7 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { logIn } from 'redux/auth/operations';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const schema = yup
   .object({

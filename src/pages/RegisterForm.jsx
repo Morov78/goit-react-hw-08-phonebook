@@ -42,7 +42,7 @@ const RegisterForm = () => {
     console.log(data);
     dispatch(registerUser(data));
 
-    // reset();
+    reset();
   };
 
   return (
