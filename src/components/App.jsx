@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import Contacts from 'pages/Contacts';
 import AppBar from './AppBar/AppBar';
@@ -9,21 +9,25 @@ import Login from 'pages/LoginForm';
 import Home from 'pages/Home';
 
 import { refreshUser } from 'redux/auth/operations';
-import { selectIsRefreshing } from 'redux/auth/selectors';
+
+import { useAuth } from '../hooks/useAuth';
+import { RestrictedRoute } from './RestrictedRoute';
+import { PrivateRoute } from './PrivateRoute';
 
 // Переробити AppBar в Loyaout
 
 export const App = () => {
   const dispatch = useDispatch();
-  const isRefreshing = useSelector(selectIsRefreshing);
+  const { isRefreshing } = useAuth();
 
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
 
   if (isRefreshing) {
-    return;
+    return <b>Refreshing user</b>;
   }
+
   return (
     <div
       style={{
@@ -39,9 +43,30 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<AppBar />}>
           <Route index element={<Home />} />
-          <Route path="contacts" element={<Contacts />} />
-          <Route path="register" element={<RegisterForm />} />
-          <Route path="login" element={<Login />} />
+
+          <Route
+            path="contacts"
+            element={
+              <PrivateRoute redirectTo="/login" component={<Contacts />} />
+            }
+          />
+
+          <Route
+            path="register"
+            element={
+              <RestrictedRoute
+                redirectTo="/contacts"
+                component={<RegisterForm />}
+              />
+            }
+          />
+
+          <Route
+            path="login"
+            element={
+              <RestrictedRoute redirectTo="/contacts" component={<Login />} />
+            }
+          />
         </Route>
       </Routes>
     </div>

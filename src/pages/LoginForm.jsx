@@ -1,13 +1,23 @@
 import { FaUserPlus } from 'react-icons/fa';
+import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 
-import { Box, Button, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from '@mui/material';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { logIn } from 'redux/auth/operations';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const schema = yup
   .object({
@@ -17,8 +27,9 @@ const schema = yup
   .required();
 
 const Login = () => {
+  const [password, setPassword] = useState('');
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const {
     register,
@@ -29,13 +40,30 @@ const Login = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       email: 'morov78@ukr.net',
-      password: '10101010',
+      password: '',
     },
   });
 
+  // useEffect(() => {
+  //   console.log({ ...register('password') });
+  // });
+
+  const handleChange = event => {
+    setPassword(event.currentTarget.value);
+    // console.log({ ...register('password') });
+  };
+
+  const handleClickShowPassword = () => {
+    setIsShowPassword(!isShowPassword);
+  };
+
+  const handleMouseDownPassword = event => {
+    event.preventDefault();
+  };
+
   const handleForm = async data => {
+    setPassword('');
     await dispatch(logIn(data));
-    navigate('/contacts');
     reset();
   };
 
@@ -67,16 +95,32 @@ const Login = () => {
           helperText={errors.email?.message}
         />
 
-        <TextField
-          {...register('password')}
-          id="password"
-          label="Password"
-          type="password"
-          variant="outlined"
-          required
-          error={errors.password ? true : false}
-          helperText={errors.password?.message}
-        />
+        <FormControl variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password" required>
+            Password
+          </InputLabel>
+          <OutlinedInput
+            {...register('password')}
+            id="outlined-adornment-password"
+            label="password"
+            type={isShowPassword ? 'text' : 'password'}
+            value={password}
+            onChange={handleChange}
+            required
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {isShowPassword ? <BsFillEyeSlashFill /> : <BsFillEyeFill />}
+                </IconButton>
+              </InputAdornment>
+            }
+          ></OutlinedInput>
+        </FormControl>
 
         <Button
           variant="contained"

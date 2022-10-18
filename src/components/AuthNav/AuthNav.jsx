@@ -18,8 +18,8 @@ const StyledLink = styled(NavLink)`
 export const AuthNav = () => {
   return (
     <>
-      <StyledLink to="register">Register</StyledLink>
-      <StyledLink to="login">Login</StyledLink>
+      <StyledLink to="/register">Register</StyledLink>
+      <StyledLink to="/login">Login</StyledLink>
     </>
   );
 };

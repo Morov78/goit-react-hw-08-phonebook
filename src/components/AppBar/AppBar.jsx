@@ -4,7 +4,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import logo from '../../Images/logo.png';
 import { useSelector } from 'react-redux';
 import { selectIsLogged } from 'redux/auth/selectors';
-import { UserNav } from 'components/UserMenu/UserMenu';
+import { UserMenu } from 'components/UserMenu/UserMenu';
 import { AuthNav } from 'components/AuthNav/AuthNav';
 
 const Container = styled.header`
@@ -61,7 +61,6 @@ const StyledLogo = styled(NavLink)`
 const AppBar = () => {
   const isLogged = useSelector(selectIsLogged);
 
-  console.log(isLogged);
   return (
     <>
       <Container>
@@ -72,10 +71,10 @@ const AppBar = () => {
           <StyledLink to="/" end>
             Home
           </StyledLink>
-          {isLogged && <StyledLink to="contacts">Contacts</StyledLink>}
+          <StyledLink to="contacts">Contacts</StyledLink>
         </Nav>
 
-        <Wrap>{isLogged ? <UserNav /> : <AuthNav />}</Wrap>
+        <Wrap>{isLogged ? <UserMenu /> : <AuthNav />}</Wrap>
       </Container>
       <Outlet />
     </>
