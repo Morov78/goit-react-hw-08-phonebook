@@ -1,15 +1,16 @@
-import { FaUserPlus } from 'react-icons/fa';
 import { BsFillEyeFill, BsFillEyeSlashFill } from 'react-icons/bs';
 
 import {
   Box,
   Button,
+  Container,
   FormControl,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   TextField,
+  Typography,
 } from '@mui/material';
 
 import { useForm } from 'react-hook-form';
@@ -18,6 +19,7 @@ import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { logIn } from 'redux/auth/operations';
 import { useState } from 'react';
+import { StyledLink } from 'components/StyledLink';
 
 const schema = yup
   .object({
@@ -27,7 +29,6 @@ const schema = yup
   .required();
 
 const Login = () => {
-  const [password, setPassword] = useState('');
   const [isShowPassword, setIsShowPassword] = useState(false);
   const dispatch = useDispatch();
 
@@ -44,15 +45,6 @@ const Login = () => {
     },
   });
 
-  // useEffect(() => {
-  //   console.log({ ...register('password') });
-  // });
-
-  const handleChange = event => {
-    setPassword(event.currentTarget.value);
-    // console.log({ ...register('password') });
-  };
-
   const handleClickShowPassword = () => {
     setIsShowPassword(!isShowPassword);
   };
@@ -61,26 +53,29 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const handleForm = async data => {
-    setPassword('');
-    await dispatch(logIn(data));
+  const handleForm = data => {
+    dispatch(logIn(data));
     reset();
   };
 
   return (
-    <>
-      <h2 style={{ fontSize: '1em' }}>Login</h2>
+    <Container align="center">
+      <Typography variant="h2" gutterBottom>
+        Login
+      </Typography>
+
       <Box
         component="form"
         autoComplete="off"
         noValidate
         onSubmit={handleSubmit(handleForm)}
         sx={{
+          width: '300px',
           border: '2px solid #1384e7',
           padding: '30px 20px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '40px',
+          gap: '20px',
         }}
       >
         <TextField
@@ -90,9 +85,8 @@ const Login = () => {
           placeholder="example@mail.com"
           variant="outlined"
           required
-          // aria-invalid={errors.email ? 'true' : 'false'}
           error={errors.email ? true : false}
-          helperText={errors.email?.message}
+          helperText={errors.email?.message || ' '}
         />
 
         <FormControl variant="outlined">
@@ -104,8 +98,6 @@ const Login = () => {
             id="outlined-adornment-password"
             label="password"
             type={isShowPassword ? 'text' : 'password'}
-            value={password}
-            onChange={handleChange}
             required
             endAdornment={
               <InputAdornment position="end">
@@ -122,17 +114,21 @@ const Login = () => {
           ></OutlinedInput>
         </FormControl>
 
-        <Button
-          variant="contained"
-          size="large"
-          endIcon={<FaUserPlus style={{ marginLeft: '10px' }} />}
-          color="primary"
-          type="submit"
-        >
-          Add User
+        <Button variant="contained" size="large" color="primary" type="submit">
+          Log In
         </Button>
+
+        <Typography
+          variant="caption"
+          display="flex"
+          justifyContent="center"
+          gap="5px"
+        >
+          Not have an account?
+          <StyledLink to="/register">Register</StyledLink>
+        </Typography>
       </Box>
-    </>
+    </Container>
   );
 };
 

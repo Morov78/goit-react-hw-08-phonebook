@@ -3,9 +3,9 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Contacts from 'pages/Contacts';
-import AppBar from './AppBar/AppBar';
-import RegisterForm from 'pages/RegisterForm';
-import Login from 'pages/LoginForm';
+
+import RegisterForm from 'pages/RegisterPage';
+import Login from 'pages/LoginPage';
 import Home from 'pages/Home';
 
 import { refreshUser } from 'redux/auth/operations';
@@ -13,6 +13,7 @@ import { refreshUser } from 'redux/auth/operations';
 import { useAuth } from '../hooks/useAuth';
 import { RestrictedRoute } from './RestrictedRoute';
 import { PrivateRoute } from './PrivateRoute';
+import { Layout } from './Layout';
 
 // Переробити AppBar в Loyaout
 
@@ -29,46 +30,34 @@ export const App = () => {
   }
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101',
-        backgroundColor: '#e5e5e5',
-        flexDirection: 'column',
-      }}
-    >
-      <Routes>
-        <Route path="/" element={<AppBar />}>
-          <Route index element={<Home />} />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
 
-          <Route
-            path="contacts"
-            element={
-              <PrivateRoute redirectTo="/login" component={<Contacts />} />
-            }
-          />
+        <Route
+          path="contacts"
+          element={
+            <PrivateRoute redirectTo="/login" component={<Contacts />} />
+          }
+        />
 
-          <Route
-            path="register"
-            element={
-              <RestrictedRoute
-                redirectTo="/contacts"
-                component={<RegisterForm />}
-              />
-            }
-          />
+        <Route
+          path="register"
+          element={
+            <RestrictedRoute
+              redirectTo="/contacts"
+              component={<RegisterForm />}
+            />
+          }
+        />
 
-          <Route
-            path="login"
-            element={
-              <RestrictedRoute redirectTo="/contacts" component={<Login />} />
-            }
-          />
-        </Route>
-      </Routes>
-    </div>
+        <Route
+          path="login"
+          element={
+            <RestrictedRoute redirectTo="/contacts" component={<Login />} />
+          }
+        />
+      </Route>
+    </Routes>
   );
 };

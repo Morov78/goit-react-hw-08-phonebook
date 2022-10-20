@@ -44,11 +44,10 @@ const contactSlice = createSlice({
     },
 
     [deleteContact.fulfilled](state, action) {
+      console.log(action.payload);
       state.isLoading = false;
       state.error = null;
-      const index = state.items.findIndex(
-        item => item.id === action.payload.id
-      );
+      const index = state.items.findIndex(item => item.id === action.payload);
       state.items.splice(index, 1);
     },
   },
