@@ -17,9 +17,8 @@ const contactSlice = createSlice({
   name: 'contacts',
   initialState: contactsInitialState,
   reducers: {
-    deleteContact(state, action) {
-      const index = state.items.findIndex(item => item.id === action.payload);
-      state.items.splice(index, 1);
+    deleteUserContacts(state, action) {
+      state.items = [];
     },
   },
   extraReducers: {
@@ -54,3 +53,5 @@ const contactSlice = createSlice({
 });
 
 export const contactsReducer = contactSlice.reducer;
+
+export const { deleteUserContacts } = contactSlice.actions;

@@ -3,25 +3,50 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css/animate.min.css';
 
 import { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import css from './ContactForm.module.css';
+import { useDispatch } from 'react-redux';
 
 import { addContact } from 'redux/contacts/operations';
-import { selectContacts } from 'redux/contacts/selectors';
+
+import { Box, Button, TextField } from '@mui/material';
+import { Stack } from '@mui/system';
+
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import 'yup-phone';
+import { useContacts } from 'hooks/useContacts';
+
+const schema = yup
+  .object({
+    name: yup.string().required('Required'),
+    number: yup
+      .string('Must be a valid phone number')
+      .phone('UA')
+      .required('Required'),
+  })
+  .required();
 
 export default function ContactForm({ onSubmit }) {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
+  const { contacts } = useContacts();
 
   const inputNameRef = useRef();
 
-  const handleSubmit = event => {
-    event.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: '',
+      number: '',
+    },
+  });
 
-    const form = event.target;
-    const number = form.elements.number.value;
-    let name = form.elements.name.value;
+  const handleForm = data => {
+    let { name } = data;
 
     name = name[0].toUpperCase() + name.substring(1);
 
@@ -39,50 +64,58 @@ export default function ContactForm({ onSubmit }) {
         toastId: warnToastId,
         autoClose: 2000,
       });
-
       return;
     }
 
-    dispatch(addContact({ name, number }));
+    dispatch(addContact({ ...data, name }));
 
+    reset();
     inputNameRef.current.focus();
-    form.reset();
   };
 
   return (
     <>
-      <form className={css.form} onSubmit={handleSubmit}>
-        <div className={css.form__wrap}>
-          <label className={css.form__label}>
-            Name
-            <input
-              className={css.form__input}
-              type="text"
-              name="name"
-              pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-              ref={inputNameRef}
-            />
-          </label>
+      <Box
+        component="form"
+        autoComplete="off"
+        noValidate
+        maxWidth="500px"
+        padding="16px 20px"
+        border="2px solid #1384e7"
+        align="center"
+        marginBottom="16px"
+        onSubmit={handleSubmit(handleForm)}
+      >
+        <Stack direction="row" gap="10px" justifyContent="space-between">
+          <TextField
+            {...register('name')}
+            id="name"
+            label="Name"
+            variant="outlined"
+            required
+            size="small"
+            inputRef={inputNameRef}
+            error={errors.name ? true : false}
+            helperText={errors.name?.message || ' '}
+          />
 
-          <label className={css.form__label}>
-            Number
-            <input
-              className={css.form__input}
-              type="tel"
-              name="number"
-              pattern="\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-              required
-            />
-          </label>
-        </div>
+          <TextField
+            {...register('number')}
+            id="number"
+            label="Number"
+            variant="outlined"
+            required
+            size="small"
+            placeholder="0661234567"
+            error={errors.number ? true : false}
+            helperText={errors.number ? 'Must be a valid phone number' : ' '}
+          />
+        </Stack>
 
-        <button className={css.form__button} type="submit">
+        <Button variant="contained" size="large" color="primary" type="submit">
           Add contact
-        </button>
-      </form>
+        </Button>
+      </Box>
       <ToastContainer style={{ fontSize: '18px' }} />
     </>
   );

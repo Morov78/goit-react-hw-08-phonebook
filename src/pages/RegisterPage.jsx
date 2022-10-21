@@ -24,7 +24,7 @@ import {
 // import { Box } from '@mui/system';
 
 import { useState } from 'react';
-import { StyledLink } from 'components/StyledLink';
+import { StyledLink } from 'components/StyledLink.styled';
 
 const schema = yup
   .object({
@@ -49,8 +49,8 @@ const RegisterForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: 'Morov',
-      email: 'morov78@ukr.net',
+      name: '',
+      email: '',
       password: '',
     },
   });
@@ -81,12 +81,13 @@ const RegisterForm = () => {
         noValidate
         onSubmit={handleSubmit(handleForm)}
         sx={{
-          width: '300px',
+          width: '260px',
           border: '2px solid #1384e7',
           padding: '30px 20px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '20px',
+          gap: '15px',
+          color: '#000000',
         }}
       >
         <TextField
@@ -94,6 +95,7 @@ const RegisterForm = () => {
           id="name"
           label="Name"
           required
+          size="small"
           error={errors.name ? true : false}
           helperText={errors.name?.message || ' '}
         />
@@ -102,6 +104,7 @@ const RegisterForm = () => {
           {...register('email')}
           id="email"
           label="Email"
+          size="small"
           placeholder="example@mail.com"
           variant="outlined"
           required
@@ -113,6 +116,7 @@ const RegisterForm = () => {
           <InputLabel
             htmlFor="outlined-adornment-password"
             required
+            size="small"
             error={errors.password ? true : false}
           >
             Password
@@ -123,6 +127,7 @@ const RegisterForm = () => {
             label="Password"
             type={isShowPassword ? 'text' : 'password'}
             required
+            size="small"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -167,4 +172,5 @@ const RegisterForm = () => {
     </Container>
   );
 };
+
 export default RegisterForm;

@@ -1,8 +1,7 @@
 // import css from './ContactList.module.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectFilteredContacts } from 'redux/contacts/selectors';
+import { useDispatch } from 'react-redux';
+
 import {
-  IconButton,
   Table,
   TableBody,
   TableContainer,
@@ -12,15 +11,15 @@ import {
 
 import { RiDeleteBinFill } from 'react-icons/ri';
 import { deleteContact } from 'redux/contacts/operations';
-import { StyledTableCell } from './ContactList.styled';
+import { StyledIconButton, StyledTableCell } from './ContactList.styled';
+
+import { useContacts } from 'hooks/useContacts';
 
 export default function ContactList() {
   const dispatch = useDispatch();
-
-  const contacts = useSelector(selectFilteredContacts);
+  const { contacts } = useContacts();
 
   const handleDeleteContact = id => {
-    console.log(id);
     dispatch(deleteContact(id));
   };
 
@@ -33,7 +32,7 @@ export default function ContactList() {
         borderCollapse: 'collapse',
       }}
     >
-      <Table stickyHeader={true}>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             <StyledTableCell variant="head" align="center">
@@ -51,16 +50,13 @@ export default function ContactList() {
         <TableBody>
           {contacts.map(({ id, name, number }) => {
             return (
-              <TableRow
-                key={id}
-                // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
+              <TableRow key={id}>
                 <StyledTableCell>{name}</StyledTableCell>
                 <StyledTableCell>{number}</StyledTableCell>
                 <StyledTableCell>
-                  <IconButton onClick={() => handleDeleteContact(id)}>
+                  <StyledIconButton onClick={() => handleDeleteContact(id)}>
                     <RiDeleteBinFill />
-                  </IconButton>
+                  </StyledIconButton>
                 </StyledTableCell>
               </TableRow>
             );

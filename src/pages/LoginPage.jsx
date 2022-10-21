@@ -19,7 +19,7 @@ import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { logIn } from 'redux/auth/operations';
 import { useState } from 'react';
-import { StyledLink } from 'components/StyledLink';
+import { StyledLink } from 'components/StyledLink.styled';
 
 const schema = yup
   .object({
@@ -40,7 +40,7 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      email: 'morov78@ukr.net',
+      email: '',
       password: '',
     },
   });
@@ -70,7 +70,7 @@ const Login = () => {
         noValidate
         onSubmit={handleSubmit(handleForm)}
         sx={{
-          width: '300px',
+          width: '260px',
           border: '2px solid #1384e7',
           padding: '30px 20px',
           display: 'flex',
@@ -85,12 +85,17 @@ const Login = () => {
           placeholder="example@mail.com"
           variant="outlined"
           required
+          size="small"
           error={errors.email ? true : false}
           helperText={errors.email?.message || ' '}
         />
 
         <FormControl variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password" required>
+          <InputLabel
+            htmlFor="outlined-adornment-password"
+            required
+            size="small"
+          >
             Password
           </InputLabel>
           <OutlinedInput
@@ -99,6 +104,7 @@ const Login = () => {
             label="password"
             type={isShowPassword ? 'text' : 'password'}
             required
+            size="small"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -114,7 +120,13 @@ const Login = () => {
           ></OutlinedInput>
         </FormControl>
 
-        <Button variant="contained" size="large" color="primary" type="submit">
+        <Button
+          variant="contained"
+          size="large"
+          color="primary"
+          type="submit"
+          sx={{ marginTop: '30px' }}
+        >
           Log In
         </Button>
 

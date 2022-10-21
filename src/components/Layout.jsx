@@ -6,6 +6,8 @@ import 'animate.css/animate.min.css';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import AppBar from './AppBar/AppBar';
+import { Suspense } from 'react';
+import { Loader } from './Loader/Loader';
 
 const warnToastId = 'toast-id';
 
@@ -32,18 +34,24 @@ export const Layout = () => {
   return (
     <>
       <Box
-        sx={{
-          fontSize: 40,
-          minHeight: '100vh',
-          color: '#010101',
-          backgroundColor: '#e5e5e5',
-        }}
+        backgroundColor="#e5e5e5"
+        fontSize="40px"
+        minHeight="100vh"
+        color="#010101"
       >
         <Container sx={{ width: '768px' }}>
           <Stack spacing={2}>
             <AppBar />
             <Container>
-              <Outlet />
+              <Suspense
+                fallback={
+                  <Stack alignItems="center">
+                    <Loader />
+                  </Stack>
+                }
+              >
+                <Outlet />
+              </Suspense>
             </Container>
           </Stack>
         </Container>
